@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+# FOODEX App (CRA + Tailwind)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplicación web creada con Create React App (React 18) y Tailwind CSS. Incluye panel para alumnos/profesores, visualización de recetas, adjunto de documentos Word y mejora de estilos responsive para tablet.
 
-## Available Scripts
+## Requisitos
+- Node.js LTS (recomendado >= 16)
+- npm
 
-In the project directory, you can run:
+## Instalación
+```powershell
+npm install
+```
 
-### `npm start`
+## Ejecutar en desarrollo (web)
+```powershell
+npm start
+```
+Se abre en `http://localhost:3000`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Ver desde una tablet en la misma red
+1. Obtén tu IP local:
+```powershell
+ipconfig
+```
+Busca “Dirección IPv4” (ej. `192.168.1.34`).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. Levanta el servidor accesible en la red:
+```powershell
+$env:HOST="0.0.0.0"; $env:PORT="3000"; npm start
+```
 
-### `npm test`
+3. En la tablet abre `http://<TU_IP_LOCAL>:3000` (ej.: `http://192.168.1.34:3000`). Si Windows pide permisos de firewall, permítelos.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tests
+```powershell
+npm test
+```
+Ejecuta las pruebas en modo interactivo (Jest + Testing Library). Hay una prueba básica en `src/App.test.js`.
 
-### `npm run build`
+## Build de producción
+```powershell
+npm run build
+```
+Genera la carpeta `build/` minificada y lista para desplegar.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Estilos (Tailwind + utilidades)
+- Tailwind configurado en `tailwind.config.js` y `postcss.config.js`.
+- Estilos globales en `src/styles/globals.css` (incluye `@tailwind base`, `components`, `utilities` y variables CSS para tema claro/oscuro).
+- Clases utilitarias combinadas con `tailwind-merge` y `clsx` (función `cn`).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## UI y librerías
+- Componentes UI propios en `src/components/ui/*` (basados en Radix UI):
+	- Dialog, Tabs, Checkbox, Accordion, Avatar, AspectRatio, etc.
+- Iconos: `lucide-react`.
+- Notificaciones: `sonner` (Toaster en `src/index.js`).
+- Fechas: `react-day-picker` (calendario).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Funcionalidades clave
+- Login simple (`src/components/LoginPage.js`).
+- Dashboard con tarjetas de recetas y estadísticas.
+- Botón “+ Nueva Receta” para profesores: abre un modal para crear una receta rápida y adjuntar un archivo Word (`.doc`/`.docx`).
+- Si la receta tiene documento adjunto, aparece el botón “Documento” para descargarlo/abrirlo.
+- Vista de receta con pestañas (Proceso, Ingredientes, Técnicas, Montaje, Costos) y modal de utensilios.
+- Botón de “Logout” ahora destacado con estilo “destructive” para mayor visibilidad.
 
-### `npm run eject`
+## Cómo agregar una nueva receta (con archivo Word)
+1. Inicia sesión como “Profesor”.
+2. En el Dashboard, haz clic en “+ Nueva Receta”.
+3. Completa “Código”, “Nombre” y opcionalmente “Categoría”.
+4. Adjunta tu archivo Word (`.doc` o `.docx`) si quieres compartir el documento completo.
+5. Guarda. La receta aparecerá en la grilla. Si adjuntaste archivo, verás el botón “Documento”.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Notas:
+- El visor en navegador de `.doc/.docx` puede no ser compatible; se ofrece descarga o apertura en pestaña nueva.
+- Los datos de ejemplo residen en `src/data/recipes.js`. Las recetas nuevas se agregan en memoria (estado de la app) para la demo.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Estructura relevante
+- `src/App.js`: estado global de usuario, recetas y navegación.
+- `src/components/Dashboard.js`: listado, “+ Nueva Receta”, visor de documento, logout.
+- `src/components/NewRecipeModal.js`: modal para crear receta y adjuntar Word.
+- `src/components/DocViewerDialog.js`: diálogo para descargar/abrir documento.
+- `src/components/RecipeView.js`: detalle con pestañas.
+- `src/components/ui/*`: componentes base reutilizables.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Dependencias
+Consulta `requeriments.txt` para una lista plana de dependencias (`dependencies` y `devDependencies`) con versiones usadas en este proyecto.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Solución de problemas
+- “No se ven los estilos / Tailwind”: verifica que `src/index.js` importe `./styles/globals.css` (ya está hecho) y que hayas ejecutado `npm install`.
+- Puerto 3000 ocupado:
+```powershell
+$env:PORT=3001; npm start
+```
+- Acceso desde tablet: asegúrate que PC y tablet están en la misma Wi‑Fi y permite el firewall al primer arranque.
+- Si la instalación falla, reinstala limpio:
+```powershell
+Remove-Item -Recurse -Force node_modules, package-lock.json
+npm install
+```
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+Proyecto iniciado con [Create React App](https://github.com/facebook/create-react-app).
