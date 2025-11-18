@@ -136,16 +136,6 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
                   </div>
 
                   <Button className="w-full text-xl py-6 mt-4">Ver Ficha Técnica</Button>
-                  <div className="grid grid-cols-2 gap-3 mt-2">
-                    <Button className="text-lg py-4" onClick={(e) => { e.stopPropagation(); onSelectRecipe(recipe.id); }}>
-                      Ver Ficha Técnica
-                    </Button>
-                    {recipe.docUrl && (
-                      <Button variant="outline" className="text-lg py-4" onClick={(e) => { e.stopPropagation(); setDocToView({ name: recipe.docName, url: recipe.docUrl }); }}>
-                        Documento
-                      </Button>
-                    )}
-                  </div>
                 </CardContent>
               </Card>
             ))}
