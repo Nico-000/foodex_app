@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { LoginPage } from "./components/LoginPage";
+import { Dashboard } from "./components/Dashboard";
+import { RecipeView } from "./components/RecipeView";
+import { recipeDatabase } from "./data/recipes";
 
-function App() {
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+  const [recipes, setRecipes] = useState(recipeDatabase);
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setSelectedRecipeId(null);
+  };
+
+  const handleSelectRecipe = (recipeId) => {
+    setSelectedRecipeId(recipeId);
+  };
+
+  const handleBackToDashboard = () => {
+    setSelectedRecipeId(null);
+  };
+
+  const handleAddRecipe = (newRecipe) => {
+    setRecipes((prev) => [{ ...newRecipe }, ...prev]);
+  };
+
+  if (!user) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
+  if (selectedRecipeId) {
+    return (
+      <RecipeView
+        recipeId={selectedRecipeId}
+        user={user}
+        onBack={handleBackToDashboard}
+        onLogout={handleLogout}
+      />
+    );
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Dashboard
+      user={user}
+      recipes={recipes}
+      onLogout={handleLogout}
+      onSelectRecipe={handleSelectRecipe}
+      onAddRecipe={handleAddRecipe}
+    />
   );
 }
-
-export default App;
