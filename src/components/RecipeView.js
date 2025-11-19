@@ -96,12 +96,7 @@ export function RecipeView({ recipeId, user, onBack, onLogout }) {
                 <Bell className="w-6 h-6 mr-2" />
                 Utensilios
               </Button>
-              <Button 
-                variant="outline" 
-                onClick={onLogout}
-                size="lg"
-                className="text-white border-white hover:bg-white/10 p-6"
-              >
+              <Button variant="destructive" onClick={onLogout} size="lg" className="p-6 text-lg">
                 <LogOut className="w-6 h-6" />
               </Button>
             </div>
