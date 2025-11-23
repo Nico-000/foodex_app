@@ -26,7 +26,7 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
                 </div>
                 <div>
                   <p className="text-lg text-slate-600 mb-1">Recetas del Semestre</p>
-                  <p className="text-4xl">{recipes.length}/10</p>
+                  <p className="text-2xl">{recipes.length}/10</p>
                 </div>
               </div>
             </CardContent>
@@ -40,7 +40,7 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
                 </div>
                 <div>
                   <p className="text-lg text-slate-600 mb-1">Tiempo Promedio</p>
-                  <p className="text-4xl">
+                  <p className="text-2xl">
                     {Math.round(recipes.reduce((sum, r) => sum + r.tiempo, 0) / recipes.length)} min
                   </p>
                 </div>
@@ -56,7 +56,7 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
                 </div>
                 <div>
                   <p className="text-lg text-slate-600 mb-1">Rol Actual</p>
-                  <p className="text-4xl">{user.role === 'profesor' ? 'Docente' : 'Estudiante'}</p>
+                  <p className="text-2xl"> {user.role === 'profesor' ? 'Profesor' : 'Alumno'}</p>
                 </div>
               </div>
             </CardContent>
@@ -113,20 +113,7 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
               </Card>
             ))}
 
-            {/* Empty slots */}
-            {Array.from({ length: 10 - recipes.length }).map((_, idx) => (
-              <Card key={`empty-${idx}`} className="border-dashed border-2">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-slate-400">Receta Pendiente</CardTitle>
-                </CardHeader>
-                <CardContent className="flex items-center justify-center py-16">
-                  <div className="text-center text-slate-400">
-                    <Calendar className="w-16 h-16 mx-auto mb-3" />
-                    <p className="text-xl">Disponible próximamente</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {/* Placeholders removed per user request */}
           </div>
         </div>
       </div>

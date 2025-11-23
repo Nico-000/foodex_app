@@ -19,13 +19,9 @@ export function DashboardStats({ recipes, user }) {
         <h3 className="text-xl font-semibold mb-2">Tiempo Promedio</h3>
         <p className="text-4xl font-bold">{promedioTiempo} min</p>
       </Card>
-      <Card className="p-6 bg-slate-800/40 text-white border-slate-700 flex flex-col">
+      <Card className="p-6 bg-slate-800/40 text-white border-slate-700">
         <h3 className="text-xl font-semibold mb-2">Rol Actual</h3>
-        <div className="mt-auto">
-          <Badge variant={user.role === 'profesor' ? 'default' : 'secondary'} className="text-lg px-4 py-2">
-            {user.role === 'profesor' ? 'Profesor' : 'Alumno'}
-          </Badge>
-        </div>
+        <p className="text-3xl font-bold break-words">{user.role === 'profesor' ? 'Profesor' : 'Estudiante'}</p>
       </Card>
     </div>
   );
