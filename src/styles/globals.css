@@ -22,6 +22,7 @@
   --input: transparent;
   --input-background: #f3f3f5;
   --ring: #6b7280;
+  --font-open-sans: 'Open Sans', sans-serif;
   --muted: #ececf0;
   --muted-foreground: #717182;
 }
