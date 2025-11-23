@@ -65,7 +65,7 @@ export function RecipeView({ recipeId, user, onBack, onLogout }) {
   return (
     <div className="min-h-screen bg-slate-50">
       <DashboardHeader user={user} onLogout={onLogout}>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <Button 
               variant="ghost" 
@@ -76,7 +76,7 @@ export function RecipeView({ recipeId, user, onBack, onLogout }) {
               <ArrowLeft className="w-7 h-7" />
             </Button>
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-3 mb-1">
+              <div className="flex items-center gap-3 mb-1 flex-wrap">
                 <h2 className="text-2xl truncate">{recipe.nombre}</h2>
                 <Badge variant="secondary" className="text-base px-3 py-1 flex-shrink-0">{recipe.codigo}</Badge>
               </div>
@@ -86,7 +86,7 @@ export function RecipeView({ recipeId, user, onBack, onLogout }) {
           <Button 
             onClick={() => setShowUtensilsModal(true)}
             size="lg"
-            className="bg-orange-600 hover:bg-orange-700 text-lg px-6 py-6"
+            className="bg-orange-600 hover:bg-orange-700 text-lg px-6 py-6 flex-shrink-0"
           >
             <Bell className="w-6 h-6 mr-2" />
             Utensilios
