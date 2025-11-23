@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { ChefHat, LogOut, Clock, Users, Calendar } from 'lucide-react';
-import Logo from '../imports/Logo1';
+import { ChefHat, Clock, Users, Calendar } from 'lucide-react';
 import { DocViewerDialog } from './DocViewerDialog';
 import { useState } from 'react';
+import { DashboardHeader } from './DashboardHeader';
 
 export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe, onStartNewRecipe }) {
   const [openNewRecipe, setOpenNewRecipe] = useState(false); // retained for backward compatibility (not used now)
@@ -12,34 +12,7 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-8 shadow-lg">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <div className="w-20 h-20 flex-shrink-0">
-                <Logo />
-              </div>
-              <div>
-                <h1 className="text-3xl">FOODEX - Taller Gastronómico</h1>
-                <p className="text-xl text-slate-300">Semestre 2025</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="text-right">
-                <p className="text-lg text-slate-300">Bienvenido/a</p>
-                <p className="text-2xl mb-2">{user.name}</p>
-                <Badge variant={user.role === 'profesor' ? 'default' : 'secondary'} className="text-lg px-4 py-1">
-                  {user.role === 'profesor' ? 'Profesor' : 'Alumno'}
-                </Badge>
-              </div>
-              <Button variant="destructive" onClick={onLogout} size="lg" className="p-6 text-lg">
-                <LogOut className="w-6 h-6" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader user={user} onLogout={onLogout} />
 
       {/* Stats */}
       <div className="container mx-auto max-w-6xl p-8">

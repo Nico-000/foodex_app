@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { DashboardHeader } from './DashboardHeader';
+import { DashboardStats } from './DashboardStats';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -9,7 +11,7 @@ import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell } from
 const CATEGORIES = ['Cárnicos','Verduras','Ovolácteos','Abarrotes','Licores','Otros'];
 const UNIDADES = ['gr','kg','ml','lt','u'];
 
-export function NewRecipePage({ onCancel, onSave }) {
+export function NewRecipePage({ onCancel, onSave, user, recipes }) {
   const [codigo, setCodigo] = useState('');
   const [nombre, setNombre] = useState('');
   const [categoria, setCategoria] = useState('');
@@ -232,8 +234,8 @@ export function NewRecipePage({ onCancel, onSave }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-slate-50">
+      <DashboardHeader user={user}>
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Nueva Ficha Técnica</h1>
           <div className="flex gap-2">
@@ -242,6 +244,11 @@ export function NewRecipePage({ onCancel, onSave }) {
             <Button variant="secondary" onClick={exportWord}>Exportar Word</Button>
           </div>
         </div>
+        <div className="mt-6">
+          <DashboardStats user={user} recipes={recipes} />
+        </div>
+      </DashboardHeader>
+      <div className="max-w-7xl mx-auto space-y-6 p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className="grid grid-cols-5 gap-2 bg-slate-200 p-2 rounded-xl">
             <TabsTrigger value="general" className="py-4 text-lg">General</TabsTrigger>

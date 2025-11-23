@@ -71,6 +71,8 @@ export default function App() {
           handleAddRecipe(payload);
           setCreatingNewRecipe(false);
         }}
+        user={user}
+        recipes={recipes}
       />
     );
   }
