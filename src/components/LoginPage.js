@@ -8,13 +8,88 @@ import Logo from '../imports/Logo1';
 export function LoginPage({ onLogin }) {
   const [name, setName] = useState('');
   const [rut, setRut] = useState('');
+  const [rutError, setRutError] = useState('');
   const [selectedRole, setSelectedRole] = useState(null);
+
+  // Función para limpiar el RUT (quitar puntos, guiones, espacios)
+  const cleanRut = (rut) => {
+    return rut.replace(/[^0-9kK]/g, '');
+  };
+
+  // Función para formatear el RUT con puntos y guion
+  const formatRut = (rut) => {
+    const clean = cleanRut(rut);
+    if (clean.length === 0) return '';
+    
+    const dv = clean.slice(-1);
+    const body = clean.slice(0, -1);
+    
+    if (body.length === 0) return clean;
+    
+    // Formatear con puntos
+    const formatted = body.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return `${formatted}-${dv}`;
+  };
+
+  // Validar RUT chileno
+  const validateRut = (rut) => {
+    const clean = cleanRut(rut);
+    if (clean.length < 2) return false;
+    
+    const dv = clean.slice(-1).toLowerCase();
+    const body = clean.slice(0, -1);
+    
+    let suma = 0;
+    let multiplo = 2;
+    
+    for (let i = body.length - 1; i >= 0; i--) {
+      suma += multiplo * parseInt(body.charAt(i));
+      multiplo = multiplo < 7 ? multiplo + 1 : 2;
+    }
+    
+    const dvEsperado = 11 - (suma % 11);
+    let dvCalculado = '';
+    
+    if (dvEsperado === 11) {
+      dvCalculado = '0';
+    } else if (dvEsperado === 10) {
+      dvCalculado = 'k';
+    } else {
+      dvCalculado = dvEsperado.toString();
+    }
+    
+    return dv === dvCalculado;
+  };
+
+  const handleRutChange = (e) => {
+    const value = e.target.value;
+    const formatted = formatRut(value);
+    setRut(formatted);
+    
+    // Validar si el RUT tiene longitud suficiente
+    const clean = cleanRut(value);
+    if (clean.length >= 2) {
+      if (validateRut(value)) {
+        setRutError('');
+      } else {
+        setRutError('RUT inválido');
+      }
+    } else {
+      setRutError('');
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name && selectedRole) {
-      onLogin({ name, role: selectedRole });
+    if (!name || !rut || !selectedRole) return;
+    
+    // Validación final del RUT
+    if (!validateRut(rut)) {
+      setRutError('RUT inválido. Verifica el dígito verificador.');
+      return;
     }
+    
+    onLogin({ name, rut, role: selectedRole });
   };
 
   return (
@@ -61,9 +136,19 @@ export function LoginPage({ onLogin }) {
               </div>
               <div>
                 <label className="block text-xl text-gray-700 mb-4 text-left">RUT</label>
-                <Input type="text" placeholder="Ingresa tu RUT" value={rut} onChange={(e) => setRut(e.target.value)} required
-                  className="w-full px-6 py-6 text-4xl rounded-xl focus:outline-none transition-colors bg-gray-200 placeholder-gray-400 placeholder:text-xl"
+                <Input 
+                  type="text" 
+                  placeholder="Ej: 12.345.678-9" 
+                  value={rut} 
+                  onChange={handleRutChange}
+                  required
+                  className={`w-full px-6 py-6 text-4xl rounded-xl focus:outline-none transition-colors bg-gray-200 placeholder-gray-400 placeholder:text-xl ${
+                    rutError ? 'border-2 border-red-500' : ''
+                  }`}
                 />
+                {rutError && (
+                  <p className="text-red-600 text-lg mt-2 text-left">{rutError}</p>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -98,8 +183,9 @@ export function LoginPage({ onLogin }) {
               </div>
 
               <Button
-                type="submit" className="w-full bg-red-600 text-white py-10 rounded-xl hover:bg-red-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-2xl"
-                disabled={!name || !rut || !selectedRole}>
+                type="submit" 
+                className="w-full bg-red-600 text-white py-10 rounded-xl hover:bg-red-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-2xl"
+                disabled={!name || !rut || !selectedRole || !!rutError}>
                 Ingresar
               </Button>
             </form>
