@@ -3,12 +3,11 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ChefHat, LogOut, Clock, Users, Calendar } from 'lucide-react';
 import Logo from '../imports/Logo1';
-import { NewRecipeModal } from './NewRecipeModal';
 import { DocViewerDialog } from './DocViewerDialog';
 import { useState } from 'react';
 
-export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe }) {
-  const [openNewRecipe, setOpenNewRecipe] = useState(false);
+export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe, onStartNewRecipe }) {
+  const [openNewRecipe, setOpenNewRecipe] = useState(false); // retained for backward compatibility (not used now)
   const [docToView, setDocToView] = useState(null);
 
   return (
@@ -95,7 +94,7 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl text-slate-900">Recetas del Taller</h2>
             {user.role === 'profesor' && (
-              <Button size="lg" className="text-xl px-8 py-6" onClick={() => setOpenNewRecipe(true)}>+ Nueva Receta</Button>
+              <Button size="lg" className="text-xl px-8 py-6" onClick={onStartNewRecipe}>+ Nueva Receta</Button>
             )}
           </div>
 
@@ -157,11 +156,7 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
           </div>
         </div>
       </div>
-        <NewRecipeModal
-          open={openNewRecipe}
-          onOpenChange={setOpenNewRecipe}
-          onConfirm={(payload) => { onAddRecipe(payload); setOpenNewRecipe(false); }}
-        />
+        {/* Modal de receta rápida deshabilitado tras migrar a página completa */}
         <DocViewerDialog
           doc={docToView}
           onClose={() => setDocToView(null)}

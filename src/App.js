@@ -2,11 +2,14 @@ import { useState } from "react";
 import { LoginPage } from "./components/LoginPage";
 import { Dashboard } from "./components/Dashboard";
 import { RecipeView } from "./components/RecipeView";
+import { NewRecipePage } from "./components/NewRecipePage";
+import { toast } from "sonner";
 import { recipeDatabase } from "./data/recipes";
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+  const [creatingNewRecipe, setCreatingNewRecipe] = useState(false);
   const [recipes, setRecipes] = useState(recipeDatabase);
 
   const handleLogin = (userData) => {
@@ -30,6 +33,21 @@ export default function App() {
     setRecipes((prev) => [{ ...newRecipe }, ...prev]);
   };
 
+  const handleStartNewRecipe = () => {
+    if (recipes.length >= 10) {
+      // Notificar límite alcanzado
+      try {
+        toast && toast.error("Límite de 10 recetas del semestre alcanzado");
+      } catch {}
+      return;
+    }
+    setCreatingNewRecipe(true);
+  };
+
+  const handleCancelNewRecipe = () => {
+    setCreatingNewRecipe(false);
+  };
+
   if (!user) {
     return <LoginPage onLogin={handleLogin} />;
   }
@@ -45,6 +63,18 @@ export default function App() {
     );
   }
 
+  if (creatingNewRecipe) {
+    return (
+      <NewRecipePage
+        onCancel={handleCancelNewRecipe}
+        onSave={(payload) => {
+          handleAddRecipe(payload);
+          setCreatingNewRecipe(false);
+        }}
+      />
+    );
+  }
+
   return (
     <Dashboard
       user={user}
@@ -52,6 +82,7 @@ export default function App() {
       onLogout={handleLogout}
       onSelectRecipe={handleSelectRecipe}
       onAddRecipe={handleAddRecipe}
+      onStartNewRecipe={handleStartNewRecipe}
     />
   );
 }
