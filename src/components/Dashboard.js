@@ -5,6 +5,7 @@ import { ChefHat, Clock, Users, Calendar } from 'lucide-react';
 import { DocViewerDialog } from './DocViewerDialog';
 import { useState } from 'react';
 import { DashboardHeader } from './DashboardHeader';
+import { DashboardFooter } from './DashboardFooter';
 
 export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe, onStartNewRecipe }) {
   const [openNewRecipe, setOpenNewRecipe] = useState(false); // retained for backward compatibility (not used now)
@@ -134,6 +135,7 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
           doc={docToView}
           onClose={() => setDocToView(null)}
         />
+      <DashboardFooter />
     </div>
   );
 }

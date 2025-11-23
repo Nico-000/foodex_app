@@ -17,7 +17,8 @@ import {
 } from 'lucide-react';
 import { recipeDatabase } from '../data/recipes';
 import { UtensilsNotification } from './UtensilsNotification';
-import Logo from '../imports/Logo1';
+import { DashboardHeader } from './DashboardHeader';
+import { DashboardFooter } from './DashboardFooter';
 
 export function RecipeView({ recipeId, user, onBack, onLogout }) {
   const [showUtensilsModal, setShowUtensilsModal] = useState(false);
@@ -63,46 +64,35 @@ export function RecipeView({ recipeId, user, onBack, onLogout }) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header - Optimizado para tablet */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg sticky top-0 z-10">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4 flex-1 min-w-0">
-              <Button 
-                variant="ghost" 
-                onClick={onBack}
-                size="lg"
-                className="text-white hover:bg-white/10 p-5 flex-shrink-0"
-              >
-                <ArrowLeft className="w-7 h-7" />
-              </Button>
-              <div className="w-16 h-16 flex-shrink-0">
-                <Logo />
+      <DashboardHeader user={user} onLogout={onLogout}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <Button 
+              variant="ghost" 
+              onClick={onBack}
+              size="lg"
+              className="text-white hover:bg-white/10 p-5 flex-shrink-0"
+            >
+              <ArrowLeft className="w-7 h-7" />
+            </Button>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-3 mb-1">
+                <h2 className="text-2xl truncate">{recipe.nombre}</h2>
+                <Badge variant="secondary" className="text-base px-3 py-1 flex-shrink-0">{recipe.codigo}</Badge>
               </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-3 mb-1">
-                  <h1 className="text-2xl truncate">{recipe.nombre}</h1>
-                  <Badge variant="secondary" className="text-base px-3 py-1 flex-shrink-0">{recipe.codigo}</Badge>
-                </div>
-                <p className="text-slate-300 text-lg">{recipe.categoria}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <Button 
-                onClick={() => setShowUtensilsModal(true)}
-                size="lg"
-                className="bg-orange-600 hover:bg-orange-700 text-lg px-6 py-6"
-              >
-                <Bell className="w-6 h-6 mr-2" />
-                Utensilios
-              </Button>
-              <Button variant="destructive" onClick={onLogout} size="lg" className="p-6 text-lg">
-                <LogOut className="w-6 h-6" />
-              </Button>
+              <p className="text-slate-300 text-lg">{recipe.categoria}</p>
             </div>
           </div>
+          <Button 
+            onClick={() => setShowUtensilsModal(true)}
+            size="lg"
+            className="bg-orange-600 hover:bg-orange-700 text-lg px-6 py-6"
+          >
+            <Bell className="w-6 h-6 mr-2" />
+            Utensilios
+          </Button>
         </div>
-      </div>
+      </DashboardHeader>
 
       {/* Content - Optimizado para tablet */}
       <div className="container mx-auto max-w-6xl p-6">
@@ -459,6 +449,7 @@ export function RecipeView({ recipeId, user, onBack, onLogout }) {
         recipeName={recipe.nombre}
         userName={user.name}
       />
+      <DashboardFooter />
     </div>
   );
 }

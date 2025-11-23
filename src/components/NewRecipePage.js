@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { DashboardHeader } from './DashboardHeader';
 import { DashboardStats } from './DashboardStats';
+import { DashboardFooter } from './DashboardFooter';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -478,6 +479,7 @@ export function NewRecipePage({ onCancel, onSave, user, recipes }) {
           </TabsContent>
         </Tabs>
       </div>
+      <DashboardFooter />
     </div>
   );
 }
