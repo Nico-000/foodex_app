@@ -4,13 +4,12 @@ import { Dashboard } from "./components/Dashboard";
 import { RecipeView } from "./components/RecipeView";
 import { NewRecipePage } from "./components/NewRecipePage";
 import { toast } from "sonner";
-import { recipeDatabase } from "./data/recipes";
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [creatingNewRecipe, setCreatingNewRecipe] = useState(false);
-  const [recipes, setRecipes] = useState(recipeDatabase);
+  const [recipes, setRecipes] = useState([]);
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -57,6 +56,7 @@ export default function App() {
       <RecipeView
         recipeId={selectedRecipeId}
         user={user}
+        recipes={recipes}
         onBack={handleBackToDashboard}
         onLogout={handleLogout}
       />
@@ -83,7 +83,6 @@ export default function App() {
       recipes={recipes}
       onLogout={handleLogout}
       onSelectRecipe={handleSelectRecipe}
-      onAddRecipe={handleAddRecipe}
       onStartNewRecipe={handleStartNewRecipe}
     />
   );

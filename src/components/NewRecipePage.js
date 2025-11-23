@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { DashboardHeader } from './DashboardHeader';
-import { DashboardStats } from './DashboardStats';
 import { DashboardFooter } from './DashboardFooter';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
@@ -8,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Textarea } from './ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs';
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell } from 'docx';
+import { ChefHat, Package, AlertTriangle, Utensils, DollarSign } from 'lucide-react';
+import { toast } from 'sonner';
 
 const CATEGORIES = ['Cárnicos','Verduras','Ovolácteos','Abarrotes','Licores','Otros'];
 const UNIDADES = ['gr','kg','ml','lt','u'];
@@ -31,6 +32,7 @@ export function NewRecipePage({ onCancel, onSave, user, recipes }) {
   const [montaje, setMontaje] = useState('');
   const [tareaInicio, setTareaInicio] = useState('');
   const [activeTab, setActiveTab] = useState('general');
+  const [savedIngredientes, setSavedIngredientes] = useState([]);
 
   const [ingredientesCategorias, setIngredientesCategorias] = useState(
     CATEGORIES.map(c => ({ categoria: c, ingredientes: [] }))
@@ -58,6 +60,16 @@ export function NewRecipePage({ onCancel, onSave, user, recipes }) {
       ingredientes: cat.ingredientes.filter((_,j)=> j!==ingredientIndex)
     } : cat));
   };
+  
+  const saveIngredientes = () => {
+    const flat = ingredientesCategorias.flatMap(c => c.ingredientes.map(ing => ({
+      ...ing,
+      categoria: c.categoria
+    }))).filter(ing => ing.nombre.trim());
+    setSavedIngredientes(flat);
+    toast.success(`${flat.length} ingredientes guardados`);
+  };
+
   const addIngredienteEtapa = (etapaIndex) => {
     setProcesos(prev => prev.map((p,i)=> i===etapaIndex ? {
       ...p,
@@ -245,18 +257,30 @@ export function NewRecipePage({ onCancel, onSave, user, recipes }) {
             <Button variant="secondary" onClick={exportWord}>Exportar Word</Button>
           </div>
         </div>
-        <div className="mt-6">
-          <DashboardStats user={user} recipes={recipes} />
-        </div>
       </DashboardHeader>
       <div className="max-w-7xl mx-auto space-y-6 p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid grid-cols-5 gap-2 bg-slate-200 p-2 rounded-xl">
-            <TabsTrigger value="general" className="py-4 text-lg">General</TabsTrigger>
-            <TabsTrigger value="ingredientes" className="py-4 text-lg">Ingredientes</TabsTrigger>
-            <TabsTrigger value="proceso" className="py-4 text-lg">Proceso</TabsTrigger>
-            <TabsTrigger value="tecnicas" className="py-4 text-lg">Técnicas/PCC</TabsTrigger>
-            <TabsTrigger value="montaje" className="py-4 text-lg">Montaje/Costos</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-5 h-auto gap-2 bg-slate-200 p-2">
+            <TabsTrigger value="general" className="text-lg py-5 data-[state=active]:bg-white">
+              <ChefHat className="w-6 h-6 mr-2" />
+              General
+            </TabsTrigger>
+            <TabsTrigger value="ingredientes" className="text-lg py-5 data-[state=active]:bg-white">
+              <Package className="w-6 h-6 mr-2" />
+              Ingredientes
+            </TabsTrigger>
+            <TabsTrigger value="proceso" className="text-lg py-5 data-[state=active]:bg-white">
+              <ChefHat className="w-6 h-6 mr-2" />
+              Proceso
+            </TabsTrigger>
+            <TabsTrigger value="tecnicas" className="text-lg py-5 data-[state=active]:bg-white">
+              <AlertTriangle className="w-6 h-6 mr-2" />
+              Técnicas/PCC
+            </TabsTrigger>
+            <TabsTrigger value="montaje" className="text-lg py-5 data-[state=active]:bg-white">
+              <DollarSign className="w-6 h-6 mr-2" />
+              Montaje/Costos
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="general" className="space-y-6">
             <Card>
@@ -324,9 +348,12 @@ export function NewRecipePage({ onCancel, onSave, user, recipes }) {
           </TabsContent>
           <TabsContent value="ingredientes" className="space-y-6">
             <Card>
-              <CardHeader className="flex items-center justify-between">
+              <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Ingredientes por Categoría</CardTitle>
-                <Button variant="outline" onClick={adjustToGramaje}>Ajustar a Gramaje</Button>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={adjustToGramaje}>Ajustar a Gramaje</Button>
+                  <Button onClick={saveIngredientes}>Guardar Ingredientes</Button>
+                </div>
               </CardHeader>
               <CardContent className="space-y-8">
                 {ingredientesCategorias.map((cat, ci) => (
@@ -399,8 +426,25 @@ export function NewRecipePage({ onCancel, onSave, user, recipes }) {
                         {p.ingredientesUsados.map((iu, ii)=>(
                           <div key={ii} className="grid grid-cols-6 gap-2 items-end">
                             <div className="col-span-2">
-                              <label className="block mb-1">Nombre</label>
-                              <Input value={iu.nombre} onChange={e=>updateIngredienteEtapa(pi,ii,'nombre',e.target.value)} />
+                              <label className="block mb-1">Ingrediente</label>
+                              {savedIngredientes.length > 0 ? (
+                                <select 
+                                  className="w-full border rounded px-2 py-2" 
+                                  value={iu.nombre} 
+                                  onChange={e=>{
+                                    const selected = savedIngredientes.find(ing=>ing.nombre===e.target.value);
+                                    if(selected){
+                                      updateIngredienteEtapa(pi,ii,'nombre',selected.nombre);
+                                      updateIngredienteEtapa(pi,ii,'unidad',selected.unidad);
+                                    }
+                                  }}
+                                >
+                                  <option value="">Seleccionar...</option>
+                                  {savedIngredientes.map((ing,idx)=> <option key={idx} value={ing.nombre}>{ing.nombre} ({ing.categoria})</option>)}
+                                </select>
+                              ) : (
+                                <Input value={iu.nombre} onChange={e=>updateIngredienteEtapa(pi,ii,'nombre',e.target.value)} placeholder="Primero guarda ingredientes" />
+                              )}
                             </div>
                             <div>
                               <label className="block mb-1">Cantidad</label>

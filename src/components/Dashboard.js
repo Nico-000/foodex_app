@@ -1,16 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { ChefHat, Clock, Users, Calendar } from 'lucide-react';
-import { DocViewerDialog } from './DocViewerDialog';
-import { useState } from 'react';
+import { ChefHat, Clock, Users } from 'lucide-react';
 import { DashboardHeader } from './DashboardHeader';
 import { DashboardFooter } from './DashboardFooter';
 
-export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe, onStartNewRecipe }) {
-  const [openNewRecipe, setOpenNewRecipe] = useState(false); // retained for backward compatibility (not used now)
-  const [docToView, setDocToView] = useState(null);
-
+export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onStartNewRecipe }) {
   return (
     <div className="min-h-screen bg-slate-50">
       <DashboardHeader user={user} onLogout={onLogout} />
@@ -117,11 +112,6 @@ export function Dashboard({ user, recipes, onLogout, onSelectRecipe, onAddRecipe
           </div>
         </div>
       </div>
-        {/* Modal de receta rápida deshabilitado tras migrar a página completa */}
-        <DocViewerDialog
-          doc={docToView}
-          onClose={() => setDocToView(null)}
-        />
       <DashboardFooter />
     </div>
   );

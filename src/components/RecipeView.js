@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -6,8 +5,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { 
   ArrowLeft, 
-  LogOut, 
-  Bell, 
   ChefHat, 
   Clock, 
   AlertTriangle,
@@ -15,14 +12,11 @@ import {
   DollarSign,
   Package
 } from 'lucide-react';
-import { recipeDatabase } from '../data/recipes';
-import { UtensilsNotification } from './UtensilsNotification';
 import { DashboardHeader } from './DashboardHeader';
 import { DashboardFooter } from './DashboardFooter';
 
-export function RecipeView({ recipeId, user, onBack, onLogout }) {
-  const [showUtensilsModal, setShowUtensilsModal] = useState(false);
-  const recipe = recipeDatabase.find(r => r.id === recipeId);
+export function RecipeView({ recipeId, user, onBack, onLogout, recipes }) {
+  const recipe = recipes.find(r => r.id === recipeId);
 
   if (!recipe) {
     return <div>Receta no encontrada</div>;
@@ -83,14 +77,6 @@ export function RecipeView({ recipeId, user, onBack, onLogout }) {
               <p className="text-slate-300 text-lg">{recipe.categoria}</p>
             </div>
           </div>
-          <Button 
-            onClick={() => setShowUtensilsModal(true)}
-            size="lg"
-            className="bg-orange-600 hover:bg-orange-700 text-lg px-6 py-6 flex-shrink-0"
-          >
-            <Bell className="w-6 h-6 mr-2" />
-            Utensilios
-          </Button>
         </div>
       </DashboardHeader>
 
@@ -441,14 +427,6 @@ export function RecipeView({ recipeId, user, onBack, onLogout }) {
         </Tabs>
       </div>
 
-      {/* Utensilios Modal */}
-      <UtensilsNotification 
-        isOpen={showUtensilsModal}
-        onClose={() => setShowUtensilsModal(false)}
-        utensilios={recipe.utensilios}
-        recipeName={recipe.nombre}
-        userName={user.name}
-      />
       <DashboardFooter />
     </div>
   );
