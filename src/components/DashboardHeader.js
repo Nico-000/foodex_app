@@ -62,7 +62,7 @@ export function DashboardHeader({ user, onLogout, children }) {
             </div>
             <div>
               <h1 className="text-3xl">FOODEX - Taller Gastronómico</h1>
-              <p className="text-xl text-slate-300">Semestre 2025</p>
+              <p className="text-xl text-slate-300">Semestre primavera</p>
             </div>
           </div>
           <div className="flex items-center gap-6">
