@@ -128,12 +128,6 @@ export function LoginPage({ onLogin }) {
           </CardHeader>
           <CardContent className="pb-8">
             <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="mb-12">
-                <label className="block text-xl text-gray-700 mb-4 text-left">Nombre</label>
-                <Input type="text" placeholder="Ingresa tu nombre" value={name} onChange={(e) => setName(e.target.value)} required
-                  className="w-full px-6 py-6 text-4xl rounded-xl focus:outline-none transition-colors bg-gray-200 placeholder-gray-400 placeholder:text-xl"
-                />
-              </div>
               <div>
                 <label className="block text-xl text-gray-700 mb-4 text-left">RUT</label>
                 <Input 
