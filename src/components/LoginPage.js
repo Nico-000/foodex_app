@@ -6,7 +6,6 @@ import { User, GraduationCap } from 'lucide-react';
 import Logo from '../imports/Logo1';
 
 export function LoginPage({ onLogin }) {
-  const [name, setName] = useState('');
   const [rut, setRut] = useState('');
   const [rutError, setRutError] = useState('');
   const [selectedRole, setSelectedRole] = useState(null);
@@ -81,7 +80,7 @@ export function LoginPage({ onLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name || !rut || !selectedRole) return;
+    if (!rut || !selectedRole) return;
     
     // Validación final del RUT
     if (!validateRut(rut)) {
@@ -89,7 +88,7 @@ export function LoginPage({ onLogin }) {
       return;
     }
     
-    onLogin({ name, rut, role: selectedRole });
+    onLogin({ rut, role: selectedRole });
   };
 
   return (
@@ -179,7 +178,7 @@ export function LoginPage({ onLogin }) {
               <Button
                 type="submit" 
                 className="w-full bg-red-600 text-white py-10 rounded-xl hover:bg-red-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-2xl"
-                disabled={!name || !rut || !selectedRole || !!rutError}>
+                disabled={ !rut || !selectedRole || !!rutError}>
                 Ingresar
               </Button>
             </form>
